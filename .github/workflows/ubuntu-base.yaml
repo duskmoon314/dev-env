@@ -49,4 +49,5 @@ jobs:
           context: .
           file: Dockerfile.ubuntu.base
           platforms: linux/amd64,linux/arm64
+          push: true
           tags: duskmoon/dev-env:ubuntu-${{ matrix.ubuntu-version }}-base
