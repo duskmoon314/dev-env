@@ -48,5 +48,5 @@ jobs:
           cache-to: type=local,dest=/tmp/.buildx-cache
           context: .
           file: Dockerfile.ubuntu.base
-          platforms: linux/amd64,linux/arm64,windows/amd64,darwin
+          platforms: linux/amd64,linux/arm64
           tags: duskmoon/dev-env:ubuntu-${{ matrix.ubuntu-version }}-base
