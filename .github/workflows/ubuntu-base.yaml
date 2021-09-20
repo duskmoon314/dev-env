@@ -5,6 +5,8 @@ on:
     paths:
       - "Dockerfile.ubuntu.base"
       - "scripts/base/**"
+      - ".github/workflows/ubuntu-base.yaml"
+  workflow_dispatch:
 
 jobs:
   build:
