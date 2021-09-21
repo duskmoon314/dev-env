@@ -11,6 +11,3 @@ RUN apt update && \
     libvde-dev libvdeplug-dev libvte-2.91-dev libxen-dev liblzo2-dev \
     valgrind xfslibs-dev ninja-build && \
     rm -rf /var/lib/apt/lists/*
-
-WORKDIR /root/programs
-ENTRYPOINT ["zsh"]
