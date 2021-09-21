@@ -8,7 +8,7 @@ on:
       - "Dockerfile.ubuntu.base"
       - "scripts/base/**"
       - ".github/workflows/ubuntu-base.yaml"
-      - "Dockerfile.qemu.dep"
+      - "Dockerfile.ubuntu.qemu.dep"
   workflow_dispatch:
 
 jobs:
