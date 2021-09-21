@@ -63,7 +63,7 @@ jobs:
           push: true
           tags: |
             duskmoon/dev-env:ubuntu-${{ matrix.ubuntu-version }}-base
-            ghcr.io/duskmoon/dev-env:ubuntu-${{ matrix.ubuntu-version }}-base
+          # ghcr.io/duskmoon/dev-env:ubuntu-${{ matrix.ubuntu-version }}-base
 
   build-qemu-dep:
     needs: build-base
@@ -117,4 +117,4 @@ jobs:
           push: true
           tags: |
             duskmoon/dev-env:ubuntu-${{ matrix.ubuntu-version }}-qemu-dep
-            ghcr.io/duskmoon/dev-env:ubuntu-${{ matrix.ubuntu-version }}-qemu-dep
+          # ghcr.io/duskmoon/dev-env:ubuntu-${{ matrix.ubuntu-version }}-qemu-dep
