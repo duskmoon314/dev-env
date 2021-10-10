@@ -1,0 +1,13 @@
+ARG UBUNTU_VERSION=20.04
+FROM duskmoon/dev-env:ubuntu-${UBUNTU_VERSION}-qemu-dep
+
+ARG QEMU_VERSION=6.1.0
+WORKDIR /qemu
+RUN wget https://download.qemu.org/qemu-${QEMU_VERSION}.tar.xz \
+    && tar xvJf qemu-${QEMU_VERSION}.tar.xz \
+    && cd qemu-${QEMU_VERSION} \
+    && ./configure \
+    && make -j \
+    && make install \
+    && cd / \
+    && rm -rf /qemu

@@ -9,6 +9,7 @@ on:
       - "scripts/base/**"
       - ".github/workflows/ubuntu-base.yaml"
       - "Dockerfile.ubuntu.qemu.dep"
+      - "Dockerfile.ubuntu.qemu"
   workflow_dispatch:
 
 jobs:
@@ -118,3 +119,58 @@ jobs:
           tags: |
             duskmoon/dev-env:ubuntu-${{ matrix.ubuntu-version }}-qemu-dep
           # ghcr.io/duskmoon/dev-env:ubuntu-${{ matrix.ubuntu-version }}-qemu-dep
+
+  build-qemu:
+    needs: build-qemu-dep
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        ubuntu-version: [20.04]
+        qemu-version: [6.1.0, 6.0.0, 5.2.0]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Cache Docker layers
+        uses: actions/cache@v2
+        with:
+          path: /tmp/.buildx-cache
+          key: ${{ runner.os }}-buildx-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-buildx-
+
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push
+        uses: docker/build-push-action@v2
+        with:
+          build-args: |
+            UBUNTU_VERSION=${{ matrix.ubuntu-version }}
+            QEMU_VERSION=${{ matrix.qemu-version }}
+          cache-from: type=local,src=/tmp/.buildx-cache
+          cache-to: type=local,dest=/tmp/.buildx-cache
+          context: .
+          file: Dockerfile.ubuntu.qemu
+          platforms: linux/amd64,linux/arm64
+          pull: true
+          push: true
+          tags: |
+            duskmoon/dev-env:ubuntu-${{ matrix.ubuntu-version }}-qemu-${{ matrix.qemu-version }}
