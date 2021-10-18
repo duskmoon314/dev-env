@@ -1,0 +1,4 @@
+ARG ALPINE_VERSION=3.14
+FROM alpine:${ALPINE_VERSION}
+
+RUN apk add --no-cache iproute2-tc
