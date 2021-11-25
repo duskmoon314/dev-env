@@ -1,4 +1,4 @@
-name: push go-base to Docker Hub
+name: push rust-base to Docker Hub
 
 on:
   push:
@@ -9,7 +9,7 @@ on:
       - "Dockerfile.go.rust.proxy"
       - "scripts/base/**"
       - "configs/**"
-      - ".github/workflows/go-base.yaml"
+      - ".github/workflows/rust-base.yaml"
   workflow_dispatch:
 
 jobs:
@@ -17,8 +17,8 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        go-version: [1.16, 1.17]
-        rust-version: [1.56]
+        go-version: [1.16.10, 1.17.3]
+        rust-version: [1.56.1]
         os: [bullseye, buster]
 
     steps:
@@ -65,8 +65,8 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        go-version: [1.16, 1.17]
-        rust-version: [1.56]
+        go-version: [1.16.10, 1.17.3]
+        rust-version: [1.56.1]
         os: [bullseye, buster]
 
     steps:
