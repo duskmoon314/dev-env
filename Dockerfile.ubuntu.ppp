@@ -1,7 +1,0 @@
-ARG UBUNTU_VERSION=20.04
-FROM ubuntu:${UBUNTU_VERSION}
-
-RUN apt update && \
-    DEBIAN_FRONTEND=noninteractive \
-    apt install -y pppoe pppoeconf vim iproute2 kmod && \
-    rm -rf /var/lib/apt/lists/*
