@@ -3,7 +3,7 @@ ARG RUST_VERSION=1.56
 ARG OS=bullseye
 FROM duskmoon/dev-env:${OS}-go${GO_VERSION}-rust${RUST_VERSION}
 
-COPY configs/cargo-config.toml ~/.cargo/config
+COPY configs/cargo-config.toml /root/.cargo/config
 
 RUN go env -w GO111MODULE=on;\
     go env -w GOPROXY=https://goproxy.cn,direct;\
