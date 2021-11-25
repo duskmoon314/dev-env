@@ -1,0 +1,11 @@
+ARG GO_VERSION=1.17
+ARG RUST_VERSION=1.56
+ARG OS=bullseye
+FROM duskmoon/dev-env:${OS}-go${GO_VERSION}-rust${RUST_VERSION}
+
+COPY configs/cargo-config.toml ~/.cargo/config
+
+RUN go env -w GO111MODULE=on;\
+    go env -w GOPROXY=https://goproxy.cn,direct;\
+    echo 'export RUSTUP_DIST_SERVER="https://rsproxy.cn"' >> ~/.bashrc;\
+    echo 'export RUSTUP_UPDATE_ROOT="https://rsproxy.cn/rustup"' >> ~/.bashrc;
