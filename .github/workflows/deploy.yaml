@@ -1,16 +1,9 @@
-name: push ubuntu-base to Docker Hub
+name: deploy images
 
 on:
   push:
     branches:
       - main
-    paths:
-      - "Dockerfile.ubuntu.base"
-      - "scripts/base/**"
-      - ".github/workflows/ubuntu-base.yaml"
-      - "Dockerfile.ubuntu.qemu.dep"
-      - "Dockerfile.ubuntu.qemu"
-      - "Dockerfile.ubuntu.tina"
   workflow_dispatch:
 
 jobs:
@@ -18,25 +11,20 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        ubuntu-version: [14.04, 16.04, 18.04, 20.04, 21.04]
+        include:
+          - ubuntu-version: 18.04
+            tags: base-18
+          - ubuntu-version: 20.04
+            tags: base-20
+          - ubuntu-version: 22.04
+            tags: base-22
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
-
-      - name: Cache Docker layers
-        uses: actions/cache@v3
-        with:
-          path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-buildx-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-buildx-
 
       - name: Login to DockerHub
         uses: docker/login-action@v1
@@ -55,42 +43,35 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           build-args: |
-            UBUNTU_VERSION=${{ matrix.ubuntu-version }}
-          cache-from: type=local,src=/tmp/.buildx-cache
-          cache-to: type=local,dest=/tmp/.buildx-cache
-          context: .
-          file: Dockerfile.ubuntu.base
+            BASE_IMG=ubuntu:${{ matrix.ubuntu-version }}
+          file: dockerfiles/base.Dockerfile
           platforms: linux/amd64,linux/arm64
-          pull: true
           push: true
           tags: |
-            duskmoon/dev-env:ubuntu-${{ matrix.ubuntu-version }}-base
-          # ghcr.io/duskmoon/dev-env:ubuntu-${{ matrix.ubuntu-version }}-base
+            duskmoon/dev-env:${{ matrix.tags }}
+            ghcr.io/duskmoon314/dev-env:${{ matrix.tags }}
+          cache-from: type=registry,ref=ghcr.io/duskmoon314/dev-env:${{ matrix.tags }}
+          cache-to: type=inline
 
-  build-qemu-dep:
+  build-rust:
     needs: build-base
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        ubuntu-version: [20.04]
+        include:
+          - base-img: base-18
+            tags: rust-18
+          - base-img: base-20
+            tags: rust-20
+          - base-img: base-22
+            tags: rust-22
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
-
-      - name: Cache Docker layers
-        uses: actions/cache@v3
-        with:
-          path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-buildx-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-buildx-
 
       - name: Login to DockerHub
         uses: docker/login-action@v1
@@ -109,97 +90,56 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           build-args: |
-            UBUNTU_VERSION=${{ matrix.ubuntu-version }}
-          cache-from: type=local,src=/tmp/.buildx-cache
-          cache-to: type=local,dest=/tmp/.buildx-cache
-          context: .
-          file: Dockerfile.ubuntu.qemu.dep
+            BASE_IMG=duskmoon/dev-env:${{ matrix.base-img }}
+          file: dockerfiles/apply-rust.Dockerfile
           platforms: linux/amd64,linux/arm64
-          pull: true
           push: true
           tags: |
-            duskmoon/dev-env:ubuntu-${{ matrix.ubuntu-version }}-qemu-dep
-          # ghcr.io/duskmoon/dev-env:ubuntu-${{ matrix.ubuntu-version }}-qemu-dep
+            duskmoon/dev-env:${{ matrix.tags }}
+            ghcr.io/duskmoon314/dev-env:${{ matrix.tags }}
+          cache-from: type=registry,ref=ghcr.io/duskmoon314/dev-env:${{ matrix.tags }}
+          cache-to: type=inline
 
   build-qemu:
-    needs: build-qemu-dep
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        ubuntu-version: [20.04]
-        qemu-version: [6.1.0, 6.0.0, 5.2.0]
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v1
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
-
-      - name: Cache Docker layers
-        uses: actions/cache@v3
-        with:
-          path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-buildx-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-buildx-
-
-      - name: Login to DockerHub
-        uses: docker/login-action@v1
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-      - name: Login to GitHub Container Registry
-        uses: docker/login-action@v1
-        with:
-          registry: ghcr.io
-          username: ${{ github.repository_owner }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Build and push
-        uses: docker/build-push-action@v2
-        with:
-          build-args: |
-            UBUNTU_VERSION=${{ matrix.ubuntu-version }}
-            QEMU_VERSION=${{ matrix.qemu-version }}
-          cache-from: type=local,src=/tmp/.buildx-cache
-          cache-to: type=local,dest=/tmp/.buildx-cache
-          context: .
-          file: Dockerfile.ubuntu.qemu
-          platforms: linux/amd64,linux/arm64
-          pull: true
-          push: true
-          tags: |
-            duskmoon/dev-env:ubuntu-${{ matrix.ubuntu-version }}-qemu-${{ matrix.qemu-version }}
-
-  build-tina:
     needs: build-base
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        ubuntu-version: [14.04]
+        include:
+          - base-img: base-18
+            tags: qemu7-18
+            qemu-version: 7.0.0
+          - base-img: base-20
+            tags: qemu7-20
+            qemu-version: 7.0.0
+          - base-img: base-22
+            tags: qemu7-22
+            qemu-version: 7.0.0
+          - base-img: base-18
+            tags: qemu6-18
+            qemu-version: 6.2.0
+          - base-img: base-20
+            tags: qemu6-20
+            qemu-version: 6.2.0
+          - base-img: base-22
+            tags: qemu6-22
+            qemu-version: 6.2.0
+          - base-img: base-18
+            tags: qemu5-18
+            qemu-version: 5.2.0
+          - base-img: base-20
+            tags: qemu5-20
+            qemu-version: 5.2.0
+          - base-img: base-22
+            tags: qemu5-22
+            qemu-version: 5.2.0
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
-
-      - name: Cache Docker layers
-        uses: actions/cache@v3
-        with:
-          path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-buildx-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-buildx-
 
       - name: Login to DockerHub
         uses: docker/login-action@v1
@@ -218,14 +158,72 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           build-args: |
-            UBUNTU_VERSION=${{ matrix.ubuntu-version }}
-          cache-from: type=local,src=/tmp/.buildx-cache
-          cache-to: type=local,dest=/tmp/.buildx-cache
-          context: .
-          file: Dockerfile.ubuntu.tina
+            BASE_IMG=duskmoon/dev-env:${{ matrix.base-img }}
+            QEMU_VER=${{ matrix.qemu-version }}
+          file: dockerfiles/apply-qemu.Dockerfile
           platforms: linux/amd64
-          pull: true
           push: true
           tags: |
-            duskmoon/dev-env:ubuntu-${{ matrix.ubuntu-version }}-tina
-          # ghcr.io/duskmoon/dev-env:ubuntu-${{ matrix.ubuntu-version }}-qemu-dep
+            duskmoon/dev-env:${{ matrix.tags }}
+            ghcr.io/duskmoon314/dev-env:${{ matrix.tags }}
+          cache-from: type=registry,ref=ghcr.io/duskmoon314/dev-env:${{ matrix.tags }}
+          cache-to: type=inline
+
+  build-qemu-rust:
+    needs: build-qemu
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - base-img: qemu7-18
+            tags: qemu7-rust-18
+          - base-img: qemu7-20
+            tags: qemu7-rust-20
+          - base-img: qemu7-22
+            tags: qemu7-rust-22
+          - base-img: qemu6-18
+            tags: qemu6-rust-18
+          - base-img: qemu6-20
+            tags: qemu6-rust-20
+          - base-img: qemu6-22
+            tags: qemu6-rust-22
+          - base-img: qemu5-18
+            tags: qemu5-rust-18
+          - base-img: qemu5-20
+            tags: qemu5-rust-20
+          - base-img: qemu5-22
+            tags: qemu5-rust-22
+
+    steps:
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push
+        uses: docker/build-push-action@v2
+        with:
+          build-args: |
+            BASE_IMG=duskmoon/dev-env:${{ matrix.base-img }}
+          file: dockerfiles/apply-qemu-rust.Dockerfile
+          platforms: linux/amd64
+          push: true
+          tags: |
+            duskmoon/dev-env:${{ matrix.tags }}
+            ghcr.io/duskmoon314/dev-env:${{ matrix.tags }}
+          cache-from: type=registry,ref=ghcr.io/duskmoon314/dev-env:${{ matrix.tags }}
+          cache-to: type=inline
