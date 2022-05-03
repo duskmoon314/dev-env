@@ -15,7 +15,8 @@ DOCKERHUB ?= duskmoon/dev-env:
 
 BASE_IMG ?= base-22
 RUST_IMG ?= rust-22
-QEMU_IMG ?= qemu
+QEMU_IMG ?= qemu7-22
+QEMU_RUST_IMG ?= qemu7-rust-22
 
 # Base images
 USER_BASE_IMG ?= $(BASE_IMG)
@@ -65,7 +66,7 @@ EXTRA_DOCKER_RUN_ARGS   := $(EXTRA_DOCKER_IS_NOT_PODMAN_RUN_ARGS) \
 ##########
 
 .PHONY: user
-user: user_base
+user: build_user user_run
 
 .PHONY: user_base
 user_base: build_user_base user_run
@@ -75,6 +76,9 @@ user_rust: build_user_rust user_run
 
 .PHONY: user_qemu
 user_qemu: build_user_qemu user_run
+
+.PHONY: user_qemu_rust
+user_qemu_rust: build_user_qemu_rust user_run
 
 .PHONY: user_run
 user_run:
@@ -122,6 +126,8 @@ build_user_rust: USER_BASE_IMG = $(RUST_IMG)
 build_user_rust: build_user
 build_user_qemu: USER_BASE_IMG = $(QEMU_IMG)
 build_user_qemu: build_user
+build_user_qemu_rust: USER_BASE_IMG = $(QEMU_RUST_IMG)
+build_user_qemu_rust: build_user
 
 .PHONY: clean_home_dir
 clean_home_dir:

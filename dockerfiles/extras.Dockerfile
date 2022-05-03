@@ -12,11 +12,9 @@ FROM $USER_BASE_IMG
 # user.dockerfile.
 # Add extra dependencies in here!
 
-# For example, uncomment this to get cowsay on top of the sel4/camkes/l4v
-# dependencies:
 
-# hadolint ignore=DL3008,DL3009
 RUN apt-get update -q \
     && apt-get install -y --no-install-recommends \
     # Add more dependencies here
-    sudo
+    sudo \
+    # end of list

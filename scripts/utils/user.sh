@@ -119,6 +119,28 @@ if [ "$GROUP_OK" = true ]; then
     chown_setting="${UNAME}:${GROUP}"
 fi
 
+##### Customize #####
+
+# Add scripts here to customize the environment
+
+# # An example of customizing cargo source
+# touch "${CARGO_HOME}/config.toml"
+# cat << 'EOF' >> "${CARGO_HOME}/config.toml"
+# [source.crates-io]
+# replace-with = 'rsproxy'
+
+# [source.rsproxy]
+# registry = "https://rsproxy.cn/crates.io-index"
+
+# [registries.rsproxy]
+# index = "https://rsproxy.cn/crates.io-index"
+
+# [net]
+# git-fetch-with-cli = true
+# EOF
+
+##### End Customize #####
+
 # Make sure the user owns their home dir
 chown -R "$chown_setting" "/home/${UNAME}"
 chmod -R ug+rw "/home/${UNAME}"

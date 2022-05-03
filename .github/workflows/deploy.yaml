@@ -4,6 +4,11 @@ on:
   push:
     branches:
       - main
+  pull_request:
+    branches:
+      - main
+  schedule:
+    - cron: "0 0 * * 1"
   workflow_dispatch:
 
 jobs:
@@ -46,7 +51,7 @@ jobs:
             BASE_IMG=ubuntu:${{ matrix.ubuntu-version }}
           file: dockerfiles/base.Dockerfile
           platforms: linux/amd64,linux/arm64
-          push: true
+          push: ${{ github.event_name != 'pull_request' }}
           tags: |
             duskmoon/dev-env:${{ matrix.tags }}
             ghcr.io/duskmoon314/dev-env:${{ matrix.tags }}
@@ -93,7 +98,7 @@ jobs:
             BASE_IMG=duskmoon/dev-env:${{ matrix.base-img }}
           file: dockerfiles/apply-rust.Dockerfile
           platforms: linux/amd64,linux/arm64
-          push: true
+          push: ${{ github.event_name != 'pull_request' }}
           tags: |
             duskmoon/dev-env:${{ matrix.tags }}
             ghcr.io/duskmoon314/dev-env:${{ matrix.tags }}
@@ -162,7 +167,7 @@ jobs:
             QEMU_VER=${{ matrix.qemu-version }}
           file: dockerfiles/apply-qemu.Dockerfile
           platforms: linux/amd64
-          push: true
+          push: ${{ github.event_name != 'pull_request' }}
           tags: |
             duskmoon/dev-env:${{ matrix.tags }}
             ghcr.io/duskmoon314/dev-env:${{ matrix.tags }}
@@ -221,7 +226,7 @@ jobs:
             BASE_IMG=duskmoon/dev-env:${{ matrix.base-img }}
           file: dockerfiles/apply-qemu-rust.Dockerfile
           platforms: linux/amd64
-          push: true
+          push: ${{ github.event_name != 'pull_request' }}
           tags: |
             duskmoon/dev-env:${{ matrix.tags }}
             ghcr.io/duskmoon314/dev-env:${{ matrix.tags }}
