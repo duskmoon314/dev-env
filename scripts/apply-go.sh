@@ -13,26 +13,19 @@ test -d "$DIR" || DIR=$PWD
 
 as_root apt update -q
 as_root apt install -y --no-install-recommends \
-    libglib2.0-dev \
-    libfdt-dev \
-    libpixman-1-dev \
-    zlib1g-dev \
-    ninja-build \
+    g++ \
+    gcc \
+    libc6-dev \
+    make \
+    pkg-config \
     # end of list
 
 try_nonroot_first mkdir -p "$TEMP_DIR" || chown_dir_to_user "$TEMP_DIR"
 
-# qemu version
-: "${QEMU_VER:=7.0.0}"
+# golang version
+: "${GOLANG_VER:=1.18.3}"
 
-# Get qemu
-wget https://download.qemu.org/qemu-$QEMU_VER.tar.xz -O "$TEMP_DIR/qemu-$QEMU_VER.tar.xz"
-tar -xJf "$TEMP_DIR/qemu-$QEMU_VER.tar.xz"
-cd qemu-$QEMU_VER
-./configure
-make -j$(nproc)
-as_root make install
-cd ..
+wget https://dl.google.com/go/go$GOLANG_VER.linux-amd64.tar.gz -O "$TEMP_DIR/go.tar.gz"
+tar -xzf "$TEMP_DIR/go.tar.gz" -C /usr/local
 
-rm $TEMP_DIR/qemu-$QEMU_VER.tar.xz
-rm -rf qemu-$QEMU_VER
+rm $TEMP_DIR/go.tar.gz

@@ -123,6 +123,26 @@ make run
   - qemu7-rust-20: qemu7.0.0 rust-stable ubuntu 20.04
   - qemu7-rust-22: qemu7.0.0 rust-stable ubuntu 22.04
 
-```
+- go
 
-```
+  add go based on base image
+
+  ### packages
+
+  - go 1.18.3
+
+  ### tags
+
+  - go-18: go 1.18.3 ubuntu 18.04
+  - go-20: go 1.18.3 ubuntu 20.04
+  - go-22: go 1.18.3 ubuntu 22.04
+
+- go-rust
+
+  add go & rust based on base image
+
+  ### tags
+
+  - go-rust-18: go 1.18.3 rust-stable ubuntu 18.04
+  - go-rust-20: go 1.18.3 rust-stable ubuntu 20.04
+  - go-rust-22: go 1.18.3 rust-stable ubuntu 22.04
