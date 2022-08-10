@@ -17,6 +17,9 @@ BASE_IMG ?= base-22
 RUST_IMG ?= rust-22
 QEMU_IMG ?= qemu7-22
 QEMU_RUST_IMG ?= qemu7-rust-22
+GO_IMG ?= go-22
+GO_RUST_IMG ?= go-rust-22
+TINA_IMG ?= tina-22
 
 # Base images
 USER_BASE_IMG ?= $(BASE_IMG)
@@ -80,6 +83,15 @@ user_qemu: build_user_qemu user_run
 .PHONY: user_qemu_rust
 user_qemu_rust: build_user_qemu_rust user_run
 
+.PHONY: user_go
+user_go: build_user_go user_run
+
+.PHONY: user_go_rust
+user_go_rust: build_user_go_rust user_run
+
+.PHONY: user_tina
+user_tina: build_user_tina user_run
+
 .PHONY: user_run
 user_run:
 	$(DOCKER) run \
@@ -128,6 +140,12 @@ build_user_qemu: USER_BASE_IMG = $(QEMU_IMG)
 build_user_qemu: build_user
 build_user_qemu_rust: USER_BASE_IMG = $(QEMU_RUST_IMG)
 build_user_qemu_rust: build_user
+build_user_go: USER_BASE_IMG = $(GO_IMG)
+build_user_go: build_user
+build_user_go_rust: USER_BASE_IMG = $(GO_RUST_IMG)
+build_user_go_rust: build_user
+build_user_tina: USER_BASE_IMG = $(TINA_IMG)
+build_user_tina: build_user
 
 .PHONY: clean_home_dir
 clean_home_dir:
