@@ -33,4 +33,8 @@ as_root apt install -y --no-install-recommends \
     xxd \
     file \
     rsync \
+    bc \
+    u-boot-tools \
+    fakeroot \
+    cpio \
     # end of list
