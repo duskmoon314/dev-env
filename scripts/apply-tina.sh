@@ -31,4 +31,6 @@ as_root apt install -y --no-install-recommends \
     python3 \
     python-is-python3 \
     xxd \
+    file \
+    rsync \
     # end of list
