@@ -148,7 +148,7 @@ build_user_rust: build_user
 build_user_qemu_dep: USER_BASE_IMG = $(QEMU_DEP_IMG)
 build_user_qemu_dep: build_user
 build_user_qemu_dep_rust: USER_BASE_IMG = $(QEMU_DEP_RUST_IMG)
-build_user_qemu_dep_rust: build_user_qemu_dep
+build_user_qemu_dep_rust: build_user
 build_user_qemu: USER_BASE_IMG = $(QEMU_IMG)
 build_user_qemu: build_user
 build_user_qemu_rust: USER_BASE_IMG = $(QEMU_RUST_IMG)
