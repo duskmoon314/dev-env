@@ -15,11 +15,13 @@ DOCKERHUB ?= duskmoon/dev-env:
 
 BASE_IMG ?= base-22
 RUST_IMG ?= rust-22
+QEMU_DEP_IMG ?= qemu-dep-22
+QEMU_DEP_RUST_IMG ?= qemu-dep-rust-22
 QEMU_IMG ?= qemu7-22
 QEMU_RUST_IMG ?= qemu7-rust-22
 GO_IMG ?= go-22
 GO_RUST_IMG ?= go-rust-22
-TINA_IMG ?= tina-22
+TINA_IMG ?= tina-20
 
 # Base images
 USER_BASE_IMG ?= $(BASE_IMG)
@@ -77,6 +79,12 @@ user_base: build_user_base user_run
 .PHONY: user_rust
 user_rust: build_user_rust user_run
 
+.PHONY: user_qemu_dep
+user_qemu_dep: build_user_qemu_dep user_run
+
+.PHONY: user_qemu_dep_rust
+user_qemu_dep_rust: build_user_qemu_dep_rust user_run
+
 .PHONY: user_qemu
 user_qemu: build_user_qemu user_run
 
@@ -97,6 +105,7 @@ user_run:
 	$(DOCKER) run \
 		$(DOCKER_RUN_FLAGS) \
 		--hostname devenv-container \
+		--name devenv-container \
 		--rm \
 		$(EXTRA_DOCKER_RUN_ARGS) \
 		--group-add sudo \
@@ -136,6 +145,10 @@ build_user_base: USER_BASE_IMG = $(BASE_IMG)
 build_user_base: build_user
 build_user_rust: USER_BASE_IMG = $(RUST_IMG)
 build_user_rust: build_user
+build_user_qemu_dep: USER_BASE_IMG = $(QEMU_DEP_IMG)
+build_user_qemu_dep: build_user
+build_user_qemu_dep_rust: USER_BASE_IMG = $(QEMU_DEP_RUST_IMG)
+build_user_qemu_dep_rust: build_user_qemu_dep
 build_user_qemu: USER_BASE_IMG = $(QEMU_IMG)
 build_user_qemu: build_user
 build_user_qemu_rust: USER_BASE_IMG = $(QEMU_RUST_IMG)
