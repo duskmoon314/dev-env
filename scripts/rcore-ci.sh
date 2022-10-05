@@ -66,7 +66,7 @@ rustc --version
 
 # Setup targets and components
 rustup target add riscv64gc-unknown-none-elf
-cargo install cargo-binutils
+cargo install cargo-binutils --vers ~0.2
 rustup component add rust-src llvm-tools-preview
 
 # Make sure that all the files are accessible to other users:
