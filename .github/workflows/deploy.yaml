@@ -12,6 +12,16 @@ on:
   workflow_dispatch:
 
 jobs:
+  clean-untagged:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clean untagged versions
+        uses: duskmoon314/action-delete-ghcr-untagged@v1
+        with:
+          token: ${{ secrets.PAT }}
+          package_name: dev-env
+          expiration: 7
+
   build-base:
     runs-on: ubuntu-latest
     strategy:
