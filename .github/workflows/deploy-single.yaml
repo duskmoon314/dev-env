@@ -66,6 +66,6 @@ jobs:
           platforms: linux/amd64,linux/arm64
           push: ${{ github.event.inputs.deploy }}
           tags: |
-            ${{ github.event.inputs.tag }}
+            duskmoon/dev-env:${{ github.event.inputs.tag }}
           cache-from: type=registry,ref=duskmoon/dev-env:${{ github.event.inputs.tag }}
           cache-to: type=inline
