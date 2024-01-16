@@ -15,10 +15,6 @@ on:
         description: 'Args for dotfiles'
         type: string
         default: 'set -C base'
-      entrypoint:
-        description: 'Entrypoint for image'
-        type: string
-        default: '/bin/bash'
       tag:
         description: 'Tag for image'
         type: string
@@ -61,7 +57,6 @@ jobs:
             BASE_IMG=${{ github.event.inputs.base_image }}
             DOTFILES_ENV=${{ github.event.inputs.dotfiles_env }}
             DOTFILES_ARGS=${{ github.event.inputs.dotfiles_args }}
-            ENTRYPOINT=${{ github.event.inputs.entrypoint }}
           context: .
           platforms: linux/amd64,linux/arm64
           push: ${{ github.event.inputs.deploy }}
