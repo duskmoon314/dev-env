@@ -1,0 +1,7 @@
+.github/
+.git/
+
+dockerfiles/
+
+# Used in building images with dotfiles
+dotfiles/.git/
