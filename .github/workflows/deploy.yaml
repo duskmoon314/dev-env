@@ -47,7 +47,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build and push
-        uses: docker/build-push-action@v4
+        uses: docker/build-push-action@v6
         with:
           build-args: |
             BASE_IMG=ubuntu:${{ matrix.ubuntu-version }}
@@ -94,7 +94,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build and push
-        uses: docker/build-push-action@v4
+        uses: docker/build-push-action@v6
         with:
           build-args: |
             BASE_IMG=duskmoon/dev-env:${{ matrix.base-img }}
@@ -144,7 +144,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build and push
-        uses: docker/build-push-action@v4
+        uses: docker/build-push-action@v6
         with:
           build-args: |
             BASE_IMG=duskmoon/dev-env:${{ matrix.base-img }}
@@ -192,7 +192,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build and push
-        uses: docker/build-push-action@v4
+        uses: docker/build-push-action@v6
         with:
           build-args: |
             BASE_IMG=duskmoon/dev-env:${{ matrix.base-img }}
@@ -260,7 +260,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build and push
-        uses: docker/build-push-action@v4
+        uses: docker/build-push-action@v6
         with:
           build-args: |
             BASE_IMG=duskmoon/dev-env:${{ matrix.base-img }}
@@ -320,7 +320,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build and push
-        uses: docker/build-push-action@v4
+        uses: docker/build-push-action@v6
         with:
           build-args: |
             BASE_IMG=duskmoon/dev-env:${{ matrix.base-img }}
@@ -367,7 +367,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build and push
-        uses: docker/build-push-action@v4
+        uses: docker/build-push-action@v6
         with:
           build-args: |
             BASE_IMG=duskmoon/dev-env:${{ matrix.base-img }}
@@ -414,7 +414,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build and push
-        uses: docker/build-push-action@v4
+        uses: docker/build-push-action@v6
         with:
           build-args: |
             BASE_IMG=duskmoon/dev-env:${{ matrix.base-img }}
@@ -459,7 +459,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build and push
-        uses: docker/build-push-action@v4
+        uses: docker/build-push-action@v6
         with:
           build-args: |
             BASE_IMG=duskmoon/dev-env:${{ matrix.base-img }}
@@ -501,7 +501,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build and push
-        uses: docker/build-push-action@v4
+        uses: docker/build-push-action@v6
         with:
           build-args: |
             BASE_IMG=ubuntu:${{ matrix.ubuntu-version }}
@@ -543,7 +543,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build and push
-        uses: docker/build-push-action@v4
+        uses: docker/build-push-action@v6
         with:
           build-args: |
             BASE_IMG=ubuntu:${{ matrix.ubuntu-version }}
