@@ -30,10 +30,10 @@ jobs:
 
     steps:
       - name: Checkout dev-env
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Checkout dotfiles
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           repository: duskmoon314/dotfiles
           path: dotfiles
